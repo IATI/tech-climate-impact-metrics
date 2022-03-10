@@ -2,6 +2,14 @@
 
 Metrics Collector for IATI Technical Climate Impact Project
 
+## Methodology
+
+[TCI Measurement](https://docs.google.com/document/d/1GT5nm8Hm-PcBFujEQ_W4en1U-ueVrndxSfZqQ-CYSCA/edit?usp=sharing)
+
+## Internal Wiki
+
+[Measurement](https://github.com/IATI/IATI-Internal-Wiki/blob/main/Technical-Climate-Impact/Measurement.md)
+
 ## Prerequisites
 
 -   nvm - [nvm](https://github.com/nvm-sh/nvm) - Node version manager
