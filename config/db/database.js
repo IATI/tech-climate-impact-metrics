@@ -2,10 +2,6 @@ const mongoose = require('mongoose');
 const config = require('../config');
 
 class Database {
-    constructor() {
-        this.connect();
-    }
-
     // eslint-disable-next-line class-methods-use-this
     connect() {
         mongoose

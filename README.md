@@ -63,4 +63,12 @@ You need to download the .json file into the root of the project directory, then
 ## Running Metrics
 
 -   Install dependencies `npm i`
--   Run all `npm start`
+-   Run all and save in DB `npm start`
+-   Run a specific metric and get raw data (not saved in DB):
+    -   `node index.js <type>` where type is one of:
+        -   `gbIATI` - GiB of IATI in the source blob container
+        -   `cost` - Azure Cost
+        -   `acu` - ACU
+        -   `dbCompute` - Database Compute
+        -   `avgCPU` - Avg CPU %
+        -   `GAandLH` - Avg Server Response Time, Time to Interactive, and Page Weight metrics

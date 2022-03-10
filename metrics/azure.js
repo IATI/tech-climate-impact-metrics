@@ -1,7 +1,23 @@
 const fetch = require('node-fetch');
 const { Headers } = require('node-fetch');
+const { BlobServiceClient } = require('@azure/storage-blob');
 const { getBearerToken } = require('../config/azureAPI');
 const config = require('../config/config');
+
+const byteToGiB = (bytes) => Number(bytes / (1024 * 1024 * 1024)).toFixed(2);
+
+module.exports.getGbIATI = async () => {
+    const blobServiceClient = BlobServiceClient.fromConnectionString(
+        config.AZURE_BLOB_CONNECTION_STRING
+    );
+    const containerClient = blobServiceClient.getContainerClient(config.AZURE_BLOB_IATI_CONTAINER);
+    let iatiBytes = 0;
+    // eslint-disable-next-line no-restricted-syntax
+    for await (const blob of containerClient.listBlobsFlat()) {
+        iatiBytes += blob.properties.contentLength;
+    }
+    return byteToGiB(iatiBytes);
+};
 
 module.exports.getMetricCost = (rawCost) => {
     const total = rawCost.properties.rows.reduce(
