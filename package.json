@@ -1,0 +1,53 @@
+{
+    "name": "tech-climate-impact-metrics",
+    "version": "1.0.0",
+    "description": "Metric collection node script for IATI TCI Project",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "prepare": "husky install"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/IATI/tech-climate-impact-metrics.git"
+    },
+    "keywords": [
+        "iati",
+        "climate",
+        "node"
+    ],
+    "author": "Nik Osvalds",
+    "license": "AGPL-3.0-or-later",
+    "bugs": {
+        "url": "https://github.com/IATI/tech-climate-impact-metrics/issues"
+    },
+    "homepage": "https://github.com/IATI/tech-climate-impact-metrics#readme",
+    "dependencies": {
+        "@azure/storage-blob": "^12.8.0",
+        "chrome-launcher": "^0.15.0",
+        "date-fns": "^2.28.0",
+        "dotenv": "^16.0.0",
+        "googleapis": "^96.0.0",
+        "lighthouse": "^9.5.0",
+        "mongoose": "^6.2.5",
+        "node-fetch": "^2.6.7"
+    },
+    "devDependencies": {
+        "eslint": "^8.10.0",
+        "eslint-config-airbnb-base": "^15.0.0",
+        "eslint-config-prettier": "^8.5.0",
+        "eslint-plugin-import": "^2.25.4",
+        "husky": "^7.0.0",
+        "lint-staged": "^12.3.5",
+        "prettier": "^2.5.1"
+    },
+    "lint-staged": {
+        "*.js": "eslint --cache --fix",
+        "*.{js,css,md}": "prettier --write"
+    },
+    "engines": {
+        "node": ">=16 <17",
+        "npm": ">=8"
+    }
+}
