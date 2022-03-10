@@ -48,7 +48,9 @@ const config = require('./config/config');
             console.log(await getCPU(await getAllResources(), startDate, endDate));
             break;
         case 'GAandLH':
-            console.log(util.inspect(await getGAandLHmetrics(3), false, null, true));
+            console.log(
+                util.inspect(await getGAandLHmetrics(config.NUMBER_PAGES), false, null, true)
+            );
             break;
         default:
             break;

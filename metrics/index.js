@@ -18,6 +18,7 @@ const avgCPU = require('../config/db/metrics/avgCPU');
 const tti = require('../config/db/metrics/tti');
 const totalByteWeight = require('../config/db/metrics/totalByteWeight');
 const avgServerRes = require('../config/db/metrics/avgServerRes');
+const config = require('../config/config');
 
 const byteToMiB = (bytes) => Number(bytes / (1024 * 1024)).toFixed(2);
 
@@ -81,7 +82,7 @@ module.exports.runMetrics = async (startDate, endDate) => {
         - Avg Server Response Time
         - Page Weight
     */
-        const GAandLAdata = avgGAandLH(await getGAandLHmetrics(3));
+        const GAandLAdata = avgGAandLH(await getGAandLHmetrics(config.NUMBER_PAGES));
 
         tti.startDate = startDate;
         tti.endDate = endDate;
