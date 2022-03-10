@@ -1,0 +1,49 @@
+name: Run TCI Metrics
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '37 01 * * *' # 0137am daily
+
+env:
+  DB_HOST: ${{ secrets.TCI_MDB_HOST }}
+  DB_USER: ${{ secrets.TCI_MDB_USER }}
+  DB_PASSWORD: ${{ secrets.TCI_MDB_PASSWORD }}
+  DB_NAME: ${{ secrets.TCI_MDB_NAME }}
+  AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+  AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  AZURE_BLOB_CONNECTION_STRING: ${{ secrets.PROD_STORAGE_CONNECTION_STRING }}
+  AZURE_BLOB_IATI_CONTAINER: ${{ secrets.AZURE_BLOB_IATI_CONTAINER }}
+  GOOGLE_APPLICATION_CREDENTIALS_FILENAME: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_FILENAME }}
+  GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout GitHub Action'
+        uses: actions/checkout@v2.4.0
+
+      - name: 'Setup Node Environment'
+        uses: actions/setup-node@v2.5.1
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - name: 'Install Dependencies with NPM'
+        shell: bash
+        run: |
+          npm i -g npm
+          npm install --production
+
+      - name: 'Copy in GA Credentials file'
+        shell: bash
+        run: |
+          echo $GOOGLE_APPLICATION_CREDENTIALS > $GOOGLE_APPLICATION_CREDENTIALS_FILENAME
+
+      - name: 'Run Metrics function'
+        shell: bash
+        run: |
+          npm run metrics
