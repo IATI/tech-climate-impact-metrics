@@ -44,7 +44,7 @@ jobs:
         run: |
           echo $GOOGLE_APPLICATION_CREDENTIALS > $GOOGLE_APPLICATION_CREDENTIALS_FILENAME
 
-      - name: 'Run Metrics function'
+      - name: 'Run Metrics'
         shell: bash
         run: |
-          npm run metrics
+          npm start
