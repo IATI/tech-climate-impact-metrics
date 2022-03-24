@@ -121,6 +121,11 @@ module.exports.getGAandLHmetrics = async (numberPages) => {
             viewId: '44934478',
             baseUrl: 'https://www.iatistandard.org',
         },
+        {
+            name: 'datastore',
+            viewId: '261544007',
+            baseUrl: 'https://datastore.iatistandard.org',
+        },
     ];
 
     const queries = [
