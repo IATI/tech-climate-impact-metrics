@@ -23,7 +23,7 @@
     },
     "homepage": "https://github.com/IATI/tech-climate-impact-metrics#readme",
     "dependencies": {
-        "@azure/storage-blob": "^12.8.0",
+        "@azure/storage-blob": "^12.9.0",
         "chrome-launcher": "^0.15.0",
         "date-fns": "^2.28.0",
         "dotenv": "^16.0.0",
@@ -38,7 +38,7 @@
         "eslint-config-prettier": "^8.5.0",
         "eslint-plugin-import": "^2.25.4",
         "husky": "^7.0.0",
-        "lint-staged": "^12.3.5",
+        "lint-staged": "^12.3.7",
         "prettier": "^2.5.1"
     },
     "lint-staged": {
