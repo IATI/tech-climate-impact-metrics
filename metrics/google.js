@@ -54,6 +54,9 @@ const runLighthouseLoop = async (baseUrl, paths) =>
     paths.reduce(async (acc, pagePath) => {
         const next = await acc;
         const lhRes = await runLighthouse(baseUrl + pagePath, false);
+        if (lhRes.runtimeError !== undefined && lhRes.runtimeError.code === 'NOT_HTML') {
+            return [...next];
+        }
         return [
             ...next,
             {
@@ -111,16 +114,16 @@ module.exports.getGAandLHmetrics = async (numberPages) => {
     initAuth();
 
     const views = [
-        {
-            name: 'validator',
-            viewId: '228786876',
-            baseUrl: 'https://iativalidator.iatistandard.org',
-        },
-        {
-            name: 'website',
-            viewId: '44934478',
-            baseUrl: 'https://www.iatistandard.org',
-        },
+        // {
+        //     name: 'validator',
+        //     viewId: '228786876',
+        //     baseUrl: 'https://iativalidator.iatistandard.org',
+        // },
+        // {
+        //     name: 'website',
+        //     viewId: '44934478',
+        //     baseUrl: 'https://www.iatistandard.org',
+        // },
         {
             name: 'datastore',
             viewId: '261544007',
