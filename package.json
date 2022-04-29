@@ -5,6 +5,12 @@
     "main": "index.js",
     "scripts": {
         "start": "node index.js",
+        "gbIATI": "node index.js gbIATI",
+        "cost": "node index.js cost",
+        "acu": "node index.js acu",
+        "dbCompute": "node index.js dbCompute",
+        "avgCPU": "node index.js avgCPU",
+        "GAandLH": "node index.js GAandLH",
         "prepare": "husky install"
     },
     "repository": {

@@ -7,10 +7,58 @@
         {
             "type": "pwa-node",
             "request": "launch",
+            "name": "All",
+            "skipFiles": ["<node_internals>/**"],
+            "program": "${workspaceFolder}/",
+            "runtimeArgs": ["index.js", "all"]
+        },
+        {
+            "type": "pwa-node",
+            "request": "launch",
             "name": "GAandLH",
             "skipFiles": ["<node_internals>/**"],
             "program": "${workspaceFolder}/",
             "runtimeArgs": ["index.js", "GAandLH"]
+        },
+        {
+            "type": "pwa-node",
+            "request": "launch",
+            "name": "avgCPU",
+            "skipFiles": ["<node_internals>/**"],
+            "program": "${workspaceFolder}/",
+            "runtimeArgs": ["index.js", "avgCPU"]
+        },
+        {
+            "type": "pwa-node",
+            "request": "launch",
+            "name": "gbIATI",
+            "skipFiles": ["<node_internals>/**"],
+            "program": "${workspaceFolder}/",
+            "runtimeArgs": ["index.js", "gbIATI"]
+        },
+        {
+            "type": "pwa-node",
+            "request": "launch",
+            "name": "cost",
+            "skipFiles": ["<node_internals>/**"],
+            "program": "${workspaceFolder}/",
+            "runtimeArgs": ["index.js", "cost"]
+        },
+        {
+            "type": "pwa-node",
+            "request": "launch",
+            "name": "acu",
+            "skipFiles": ["<node_internals>/**"],
+            "program": "${workspaceFolder}/",
+            "runtimeArgs": ["index.js", "acu"]
+        },
+        {
+            "type": "pwa-node",
+            "request": "launch",
+            "name": "dbCompute",
+            "skipFiles": ["<node_internals>/**"],
+            "program": "${workspaceFolder}/",
+            "runtimeArgs": ["index.js", "dbCompute"]
         }
     ]
 }
