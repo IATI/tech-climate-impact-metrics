@@ -187,7 +187,8 @@ module.exports.getCPU = async (resources, startDate, endDate) => {
                         url.searchParams.set('metricnames', 'CpuUsage');
                         break;
                     case 'Microsoft.ContainerService/managedClusters':
-                        url.searchParams.set('metricnames', 'node_cpu_usage_percentage');
+                        url.searchParams.set('metricnames', 'cpuUsagePercentage');
+                        url.searchParams.set('metricNamespace', 'insights.container/nodes');
                         break;
                     case 'Microsoft.DBforPostgreSQL/servers':
                         url.searchParams.set('metricnames', 'cpu_percent');
