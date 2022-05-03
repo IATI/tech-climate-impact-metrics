@@ -23,8 +23,23 @@ const runAnalyticsReport = async (requestObject) => {
     return res.data;
 };
 
-const getTopUrls = (resultBody, num) =>
-    resultBody.reports[0].data.rows.splice(0, num).map((val) => val.dimensions[0]);
+const excluded = ['.js', '.css', '.ico'];
+
+const getTopUrls = (resultBody, num) => {
+    const { rows } = resultBody.reports[0].data;
+    let count = 0;
+    let i = 0;
+    const result = [];
+    while (count < num && i < rows.length - 1) {
+        const url = rows[i].dimensions[0];
+        i += 1;
+        if (excluded.every((ext) => !url.endsWith(ext))) {
+            count += 1;
+            result.push(url);
+        }
+    }
+    return result;
+};
 
 const runLighthouse = async (url, verbose) => {
     const chrome = await chromeLauncher.launch({ chromeFlags: ['--headless'] });
