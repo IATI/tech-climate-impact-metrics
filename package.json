@@ -35,7 +35,7 @@
         "dotenv": "^16.0.0",
         "googleapis": "^100.0.0",
         "lighthouse": "^9.5.0",
-        "mongoose": "^6.3.2",
+        "mongoose": "^6.3.3",
         "node-fetch": "^2.6.7"
     },
     "devDependencies": {
