@@ -29,7 +29,7 @@
     },
     "homepage": "https://github.com/IATI/tech-climate-impact-metrics#readme",
     "dependencies": {
-        "@azure/storage-blob": "^12.9.0",
+        "@azure/storage-blob": "^12.10.0",
         "chrome-launcher": "^0.15.0",
         "date-fns": "^2.28.0",
         "dotenv": "^16.0.1",
