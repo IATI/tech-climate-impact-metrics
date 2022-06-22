@@ -80,3 +80,85 @@ You need to download the .json file into the root of the project directory, then
         -   `dbCompute` - Database Compute
         -   `avgCPU` - Avg CPU %
         -   `GAandLH` - Avg Server Response Time, Time to Interactive, and Page Weight metrics
+
+## Metric Setup
+
+### gbIATI
+
+-   Relies on a Storage Account and Container that contains raw IATI XML
+
+`AZURE_BLOB_CONNECTION_STRING`
+`AZURE_BLOB_IATI_CONTAINER`
+
+### cost
+
+-   Uses the Azure Management API to pull Cost data for the supplied subscription, no additional setup required
+
+### acu
+
+-   Uses the tags `ACU=true` and `ACUvalue=<val>` on the Azure resources that should be counted towards total ACU.
+
+#### Azure Container Instances (ACI)
+
+-   Tags added during deployment with GitHub Actions: [link](https://github.com/IATI/refresher/blob/ca8e17c363d4b00bbf3638b3b41a97c533be04e9/.github/workflows/develop.yml#L134-L138)
+
+#### Azure Functions
+
+-   Consumption SKU Functions are not applicable, since there is not a dedicated server running this compute
+-   Premium SKU Functions have tags added during deployment: [link](https://github.com/IATI/js-validator-api/blob/d0f8caca9dcde8e35224d3dd72af815debde563d/.github/workflows/develop-func-deploy.yml#L150-L159)
+
+#### VMs
+
+-   For manually created VMs, tags should be added manually. You may also need to delete/change tags to =false from Network resources, etc. that have the tags applied to them from the VM.
+-   For IATI standard website, tags are added in to their VMs on deployment: [link](https://github.com/IATI/IATI-Standard-Website/blob/ca319d6567a0ab450a661cebb76370e72d50fd1f/.github/workflows/workflow.yml#L173-L177)
+
+#### Azure Kubernetes Service (AKS)
+
+-   ACU values should be calculated following the methodology and manually added to the Virtual Machine Scale Sets [link](https://portal.azure.com/#view/HubsExtension/BrowseResourceBlade/resourceType/Microsoft.Compute%2FvirtualMachineScaleSets)
+
+### dbCompute
+
+-   Counts the number of `vCores` of the resource type `Microsoft.DBforPostgreSQL/servers` using the Azure Management API
+
+### avgCPU
+
+-   Uses the tags `avgCPU=true` on the Azure resources that should be averaged to avgCPU.
+-   Uses some more filtering in the code to ensure no double-counting, etc.
+
+#### Azure Container Instances (ACI)
+
+-   Tags added during deployment with GitHub Actions: [link](https://github.com/IATI/refresher/blob/ca8e17c363d4b00bbf3638b3b41a97c533be04e9/.github/workflows/develop.yml#L134-L138)
+-   Uses `microsoft.Insights/metrics` API, for `Microsoft.ContainerInstance/containerGroups` resource type with `metricnames=CpuUsage`
+
+#### PostgreSQL Database
+
+-   Tags manually added
+-   Uses `microsoft.Insights/metrics` API, for `Microsoft.DBforPostgreSQL/servers` resource type with `metricnames=cpu_percent`
+
+#### Azure Functions
+
+-   Consumption SKU Functions are not applicable, since there is not a dedicated server running this compute
+-   Premium SKU Functions have tags added during deployment: [link](https://github.com/IATI/js-validator-api/blob/d0f8caca9dcde8e35224d3dd72af815debde563d/.github/workflows/develop-func-deploy.yml#L150-L159)
+-   Uses management `/metrics` API, for `microsoft.insights/components` resource type with `metricId`: `performanceCounters/processCpuPercentageTotal`
+-   Filters out `Microsoft.Web/sites` resource type to prevent duplicates
+
+#### VMs
+
+-   For manually created VMs, tags should be added manually
+-   For IATI standard website, tags are added in to their VMs on deployment: [link](https://github.com/IATI/IATI-Standard-Website/blob/ca319d6567a0ab450a661cebb76370e72d50fd1f/.github/workflows/workflow.yml#L173-L177)
+
+#### Azure Kubernetes Service (AKS)
+
+-   ACU values should be calculated following the methodology and manually added to the Virtual Machine Scale Sets [link](https://portal.azure.com/#view/HubsExtension/BrowseResourceBlade/resourceType/Microsoft.Compute%2FvirtualMachineScaleSets)
+
+### Google Analytics and Lighthouse
+
+-   Includes `Average Server Response Time`, `Page Weight`, and `Time to Interactive` metrics
+
+#### Google Analytics "Views"
+
+-   These are defined for each web property in this config file `config/gaViews.json`, the viewId is from Google Analytics
+
+#### `NUMBER_PAGES`
+
+-   Controls how many pages for each web property are evaluated for these metrics to create the average

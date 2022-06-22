@@ -12,6 +12,7 @@ const {
 } = require('./metrics/azure');
 const { getGAandLHmetrics } = require('./metrics/google');
 const config = require('./config/config');
+const { getTotalValue } = require('./metrics/azure');
 
 (async () => {
     // Prepare start and end dates
@@ -40,6 +41,9 @@ const config = require('./config/config');
             break;
         case 'acu':
             console.log(await getACU(await getAllResources()));
+            break;
+        case 'acu-total':
+            console.log(getTotalValue(await getACU(await getAllResources())));
             break;
         case 'dbCompute':
             console.log(await getDbCompute(await getAllResources()));

@@ -3,6 +3,7 @@ const lighthouse = require('lighthouse');
 const chromeLauncher = require('chrome-launcher');
 const path = require('path');
 const config = require('../config/config');
+const gaViews = require('../config/gaViews.json');
 
 const analyticsreporting = google.analyticsreporting('v4');
 
@@ -133,24 +134,6 @@ module.exports.avgGAandLH = (queryResults) => {
 module.exports.getGAandLHmetrics = async (numberPages) => {
     initAuth();
 
-    const views = [
-        {
-            name: 'validator',
-            viewId: '228786876',
-            baseUrl: 'https://iativalidator.iatistandard.org',
-        },
-        {
-            name: 'website',
-            viewId: '44934478',
-            baseUrl: 'https://www.iatistandard.org',
-        },
-        {
-            name: 'datastore',
-            viewId: '261544007',
-            baseUrl: 'https://datastore.iatistandard.org',
-        },
-    ];
-
     const queries = [
         {
             name: 'avgServerResponseTime',
@@ -171,7 +154,7 @@ module.exports.getGAandLHmetrics = async (numberPages) => {
         },
     ];
 
-    const queryResults = await views.reduce(async (viewAcc, view) => {
+    const queryResults = await gaViews.reduce(async (viewAcc, view) => {
         const nextView = await viewAcc;
         const queriesResults = await queries.reduce(async (acc, query) => {
             const next = await acc;
