@@ -28,6 +28,7 @@ const excluded = ['.js', '.css', '.ico'];
 
 const getTopUrls = (resultBody, num) => {
     const { rows } = resultBody.reports[0].data;
+    if (rows === undefined) return ['/'];
     let count = 0;
     let i = 0;
     const result = [];
