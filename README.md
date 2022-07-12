@@ -149,7 +149,8 @@ You need to download the .json file into the root of the project directory, then
 
 #### Azure Kubernetes Service (AKS)
 
--   ACU values should be calculated following the methodology and manually added to the Virtual Machine Scale Sets [link](https://portal.azure.com/#view/HubsExtension/BrowseResourceBlade/resourceType/Microsoft.Compute%2FvirtualMachineScaleSets)
+-   `avgCPU=true` tag added to the AKS instances. Picked up by Metric code for 'Microsoft.ContainerService/managedClusters' resourceType.
+-   Had to filter out 'Microsoft.ManagedIdentity/userAssignedIdentities' resourceType in metric run.
 
 ### Google Analytics and Lighthouse
 

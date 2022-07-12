@@ -162,7 +162,8 @@ module.exports.getCPU = async (resources, startDate, endDate) => {
                 resource.tags.avgCPU === 'true' &&
                 !resource.type.includes('Microsoft.Network') &&
                 resource.type !== 'Microsoft.Compute/virtualMachineScaleSets' &&
-                resource.type !== 'Microsoft.Web/sites'
+                resource.type !== 'Microsoft.Web/sites' &&
+                resource.type !== 'Microsoft.ManagedIdentity/userAssignedIdentities'
             ) {
                 const requestOptions = {
                     method: 'GET',
