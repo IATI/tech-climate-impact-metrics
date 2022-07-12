@@ -25,7 +25,7 @@ jobs:
         run: |
           npm i -g npm
           npm set-script prepare ""
-          npm install --production
+          npm ci --production
 
   automerge:
     needs: build

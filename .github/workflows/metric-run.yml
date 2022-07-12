@@ -3,7 +3,7 @@ name: Run TCI Metrics
 on:
   workflow_dispatch:
   schedule:
-    - cron: '37 01 * * *' # 0137am daily
+    - cron: '37 02 * * *' # 0137am daily
 
 env:
   DB_HOST: ${{ secrets.TCI_MDB_HOST }}
@@ -37,7 +37,7 @@ jobs:
         run: |
           npm i -g npm
           npm set-script prepare ""
-          npm install --production
+          npm ci --production
 
       - name: 'Copy in GA Credentials file'
         shell: bash
