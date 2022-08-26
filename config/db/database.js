@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const config = require('../config');
+import mongoose from 'mongoose';
+import config from '../config.js';
 
 class Database {
     // eslint-disable-next-line class-methods-use-this
@@ -19,4 +19,4 @@ class Database {
     }
 }
 
-module.exports = new Database();
+export default new Database();

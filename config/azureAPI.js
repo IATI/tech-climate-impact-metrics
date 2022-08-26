@@ -1,10 +1,9 @@
-const fetch = require('node-fetch');
-const { Headers } = require('node-fetch');
-const config = require('./config');
+import fetch, { Headers } from 'node-fetch';
+import config from './config.js';
 
 let token = {};
 
-module.exports.getBearerToken = async () => {
+const getBearerToken = async () => {
     if (Object.keys(token).length !== 0 && Date.now() < new Date(token.expires_on * 1000)) {
         console.log(`Using cached token, expires: ${new Date(token.expires_on * 1000)}`);
         return token;
@@ -50,3 +49,5 @@ module.exports.getBearerToken = async () => {
         return error;
     }
 };
+
+export default getBearerToken;

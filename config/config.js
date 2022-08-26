@@ -1,7 +1,9 @@
-require('dotenv').config();
-const { version } = require('../package.json');
+import 'dotenv/config';
+import { readFile } from 'fs/promises';
 
-module.exports = {
+const { version } = JSON.parse(await readFile(new URL('../package.json', import.meta.url)));
+
+const config = {
     APP_NAME: 'IATI TCI Metrics',
     VERSION: version,
     NODE_ENV: process.env.NODE_ENV,
@@ -20,3 +22,5 @@ module.exports = {
     AZURE_BLOB_IATI_CONTAINER: process.env.AZURE_BLOB_IATI_CONTAINER,
     GOOGLE_APPLICATION_CREDENTIALS_FILENAME: process.env.GOOGLE_APPLICATION_CREDENTIALS_FILENAME,
 };
+
+export default config;

@@ -1,6 +1,6 @@
-const MetricModel = require('../models/metric');
+import MetricModel from '../models/metric.js';
 
-module.exports = new MetricModel({
+export default new MetricModel({
     type: 'acu',
     displayName: 'Azure Compute Units (ACU)',
     description:
