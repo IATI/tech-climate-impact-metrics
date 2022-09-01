@@ -33,7 +33,7 @@
         "@azure/storage-blob": "^12.11.0",
         "chrome-launcher": "^0.15.1",
         "date-fns": "^2.29.2",
-        "dotenv": "^16.0.1",
+        "dotenv": "^16.0.2",
         "googleapis": "^107.0.0",
         "lighthouse": "^9.6.6",
         "mongoose": "^6.5.3",
