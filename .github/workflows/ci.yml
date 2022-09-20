@@ -13,10 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout GitHub Action'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.0.2
 
       - name: 'Setup Node Environment'
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v3.4.1
         with:
           node-version-file: '.nvmrc'
           cache: 'npm'
@@ -34,6 +34,6 @@ jobs:
       pull-requests: write
       contents: write
     steps:
-      - uses: fastify/github-action-merge-dependabot@v3.2.3
+      - uses: fastify/github-action-merge-dependabot@v3.3.1
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
