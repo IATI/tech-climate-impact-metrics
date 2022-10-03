@@ -119,7 +119,11 @@ module.exports.getAvgValue = (array) => this.getTotalValue(array) / array.length
 
 module.exports.getACU = async (resources) =>
     resources.reduce((result, resource) => {
-        if ('tags' in resource && 'ACU' in resource.tags && resource.tags.ACU === 'true') {
+        if (
+            'tags' in resource &&
+            'ACU' in resource.tags &&
+            (resource.tags.ACU === 'true' || resource.tags.ACU === 'True')
+        ) {
             let ACUvalue = null;
             if ('ACUvalue' in resource.tags) {
                 ACUvalue = resource.tags.ACUvalue;
