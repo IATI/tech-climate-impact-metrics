@@ -1,12 +1,11 @@
-const fetch = require('node-fetch');
-const { Headers } = require('node-fetch');
-const { BlobServiceClient } = require('@azure/storage-blob');
-const { getBearerToken } = require('../config/azureAPI');
-const config = require('../config/config');
+import fetch, { Headers } from 'node-fetch';
+import { BlobServiceClient } from '@azure/storage-blob';
+import config from '../config/config.js';
+import getBearerToken from '../config/azureAPI.js';
 
 const byteToGiB = (bytes) => Number(bytes / (1024 * 1024 * 1024)).toFixed(2);
 
-module.exports.getGbIATI = async () => {
+const getGbIATI = async () => {
     const blobServiceClient = BlobServiceClient.fromConnectionString(
         config.AZURE_BLOB_CONNECTION_STRING
     );
@@ -19,7 +18,7 @@ module.exports.getGbIATI = async () => {
     return byteToGiB(iatiBytes);
 };
 
-module.exports.getMetricCost = (rawCost) => {
+const getMetricCost = (rawCost) => {
     const total = rawCost.properties.rows.reduce(
         (acc, val) => Number(acc) + Number(val[1]),
         Number(0)
@@ -27,7 +26,7 @@ module.exports.getMetricCost = (rawCost) => {
     return { cost: total.toFixed(2), currency: 'USD' };
 };
 
-module.exports.getRawCost = async (startDate, endDate) => {
+const getRawCost = async (startDate, endDate) => {
     try {
         const token = await getBearerToken();
 
@@ -84,12 +83,10 @@ module.exports.getRawCost = async (startDate, endDate) => {
     }
 };
 
-module.exports.getAllResources = async () => {
+const getAllResources = async () => {
     const token = await getBearerToken();
 
     const myHeaders = new Headers();
-    // auth
-    // const token = await getBearerToken();
     myHeaders.append('Authorization', `Bearer ${token.access_token}`);
     myHeaders.append('Content-Type', 'application/json');
 
@@ -109,15 +106,15 @@ module.exports.getAllResources = async () => {
     return data.value;
 };
 
-module.exports.getTotalValue = (array) =>
+const getTotalValue = (array) =>
     array.reduce((acc, val) => {
         const res = acc + Number(val.value);
         return res;
     }, 0);
 
-module.exports.getAvgValue = (array) => this.getTotalValue(array) / array.length;
+const getAvgValue = (array) => getTotalValue(array) / array.length;
 
-module.exports.getACU = async (resources) =>
+const getACU = async (resources) =>
     resources.reduce((result, resource) => {
         if (
             'tags' in resource &&
@@ -137,7 +134,7 @@ module.exports.getACU = async (resources) =>
         return result;
     }, []);
 
-module.exports.getDbCompute = (resources) =>
+const getDbCompute = (resources) =>
     resources.reduce((result, resource) => {
         if (resource.type === 'Microsoft.DBforPostgreSQL/servers') {
             result.push({
@@ -150,7 +147,7 @@ module.exports.getDbCompute = (resources) =>
         return result;
     }, []);
 
-module.exports.getCPU = async (resources, startDate, endDate) => {
+const getCPU = async (resources, startDate, endDate) => {
     try {
         const token = await getBearerToken();
 
@@ -265,4 +262,16 @@ module.exports.getCPU = async (resources, startDate, endDate) => {
         console.error(error);
         throw new Error(error);
     }
+};
+
+export {
+    getGbIATI,
+    getMetricCost,
+    getRawCost,
+    getAllResources,
+    getACU,
+    getDbCompute,
+    getTotalValue,
+    getAvgValue,
+    getCPU,
 };

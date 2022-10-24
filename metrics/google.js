@@ -1,9 +1,9 @@
-const { google } = require('googleapis');
-const lighthouse = require('lighthouse');
-const chromeLauncher = require('chrome-launcher');
-const path = require('path');
-const config = require('../config/config');
-const gaViews = require('../config/gaViews.json');
+import { google } from 'googleapis';
+import lighthouse from 'lighthouse';
+import chromeLauncher from 'chrome-launcher';
+import path from 'path';
+import config from '../config/config.js';
+import gaViews from '../config/gaViews.js';
 
 const analyticsreporting = google.analyticsreporting('v4');
 
@@ -89,7 +89,7 @@ const runLighthouseLoop = async (baseUrl, paths) =>
         ];
     }, []);
 
-module.exports.avgGAandLH = (queryResults) => {
+const avgGAandLH = (queryResults) => {
     const res = queryResults.map((val) =>
         val.queriesResults.map((queryRes) => {
             if (queryRes.name === 'avgServerResponseTime') {
@@ -132,7 +132,7 @@ module.exports.avgGAandLH = (queryResults) => {
     );
 };
 
-module.exports.getGAandLHmetrics = async (numberPages) => {
+const getGAandLHmetrics = async (numberPages) => {
     initAuth();
 
     const queries = [
@@ -194,3 +194,5 @@ module.exports.getGAandLHmetrics = async (numberPages) => {
 
     return queryResults;
 };
+
+export { avgGAandLH, getGAandLHmetrics };

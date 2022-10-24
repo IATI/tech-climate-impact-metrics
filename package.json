@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "description": "Metric collection node script for IATI TCI Project",
     "main": "index.js",
+    "type": "module",
     "scripts": {
         "start": "node index.js",
         "gbIATI": "node index.js gbIATI",
@@ -37,7 +38,7 @@
         "googleapis": "^108.0.0",
         "lighthouse": "^9.6.7",
         "mongoose": "^6.6.6",
-        "node-fetch": "^2.6.7"
+        "node-fetch": "^3.2.10"
     },
     "devDependencies": {
         "eslint": "^8.25.0",

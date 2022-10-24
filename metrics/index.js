@@ -1,5 +1,5 @@
-const db = require('../config/db/database');
-const {
+import db from '../config/db/database.js';
+import {
     getGbIATI,
     getMetricCost,
     getRawCost,
@@ -9,16 +9,16 @@ const {
     getTotalValue,
     getAvgValue,
     getCPU,
-} = require('./azure');
-const { getGAandLHmetrics, avgGAandLH } = require('./google');
-const cost = require('../config/db/metrics/cost');
-const acu = require('../config/db/metrics/acu');
-const dbCompute = require('../config/db/metrics/dbCompute');
-const avgCPU = require('../config/db/metrics/avgCPU');
-const tti = require('../config/db/metrics/tti');
-const totalByteWeight = require('../config/db/metrics/totalByteWeight');
-const avgServerRes = require('../config/db/metrics/avgServerRes');
-const config = require('../config/config');
+} from './azure.js';
+import { getGAandLHmetrics, avgGAandLH } from './google.js';
+import cost from '../config/db/metrics/cost.js';
+import acu from '../config/db/metrics/acu.js';
+import dbCompute from '../config/db/metrics/dbCompute.js';
+import avgCPU from '../config/db/metrics/avgCPU.js';
+import tti from '../config/db/metrics/tti.js';
+import totalByteWeight from '../config/db/metrics/totalByteWeight.js';
+import avgServerRes from '../config/db/metrics/avgServerRes.js';
+import config from '../config/config.js';
 
 const byteToMiB = (bytes) => Number(bytes / (1024 * 1024)).toFixed(2);
 
@@ -26,7 +26,7 @@ const logSave = (object) => {
     console.log(`Saving to DB - ${object.type} `);
 };
 
-module.exports.runMetrics = async (startDate, endDate) => {
+const runMetrics = async (startDate, endDate) => {
     db.connect();
     console.log(`Running all metrics`);
 
@@ -112,3 +112,5 @@ module.exports.runMetrics = async (startDate, endDate) => {
         process.exit(1);
     }
 };
+
+export default runMetrics;
