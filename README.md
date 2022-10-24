@@ -114,7 +114,17 @@ You need to download the .json file into the root of the project directory, then
 
 #### Azure Kubernetes Service (AKS)
 
--   ACU values should be calculated following the methodology and manually added to the Virtual Machine Scale Sets [link](https://portal.azure.com/#view/HubsExtension/BrowseResourceBlade/resourceType/Microsoft.Compute%2FvirtualMachineScaleSets)
+-   ACU values should be calculated following the methodology and added to each Node Pool. This will apply the tags to the VM Scale Sets which is picked up by the metric script. This should also persist the tags between upgrades.
+
+E.g.
+
+```
+az aks nodepool update \
+    --resource-group myResourceGroup \
+    --cluster-name myAKSCluster \
+    --name contosoNodePool \
+    --tags ACU=true ACU=600
+```
 
 ### dbCompute
 

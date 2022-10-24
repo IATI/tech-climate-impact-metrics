@@ -116,7 +116,11 @@ const getAvgValue = (array) => getTotalValue(array) / array.length;
 
 const getACU = async (resources) =>
     resources.reduce((result, resource) => {
-        if ('tags' in resource && 'ACU' in resource.tags && resource.tags.ACU === 'true') {
+        if (
+            'tags' in resource &&
+            'ACU' in resource.tags &&
+            (resource.tags.ACU === 'true' || resource.tags.ACU === 'True')
+        ) {
             let ACUvalue = null;
             if ('ACUvalue' in resource.tags) {
                 ACUvalue = resource.tags.ACUvalue;
