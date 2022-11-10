@@ -20,24 +20,25 @@ env:
   GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
 
 jobs:
-  build-deploy:
+  build_save:
+    uses: IATI/.github/.github/workflows/build_node_save.yaml@main
+    with:
+      save_artifact: true
+      artifact_name: build-artifact
+
+  run-metrics:
+    needs: build_save
     runs-on: ubuntu-latest
     steps:
-      - name: 'Checkout GitHub Action'
-        uses: actions/checkout@v3.1.0
-
-      - name: 'Setup Node Environment'
-        uses: actions/setup-node@v3.5.1
+      - name: Download build artifact
+        uses: actions/download-artifact@v3
         with:
-          node-version-file: '.nvmrc'
-          cache: 'npm'
+          name: build-artifact
 
-      - name: 'Install Dependencies with NPM'
-        shell: bash
+      - name: Unzip build artifact
         run: |
-          npm i -g npm
-          npm set-script prepare ""
-          npm ci --production
+          unzip build-artifact.zip
+          rm build-artifact.zip
 
       - name: 'Copy in GA Credentials file'
         shell: bash
