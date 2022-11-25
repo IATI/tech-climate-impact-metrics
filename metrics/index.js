@@ -10,7 +10,8 @@ import {
     getAvgValue,
     getCPU,
 } from './azure.js';
-import { getGAandLHmetrics, avgGAandLH } from './google.js';
+import { getLHMetrics, flattenLHData } from './google.js';
+import { getAvgServerResForDomains } from './plausible.js';
 import cost from '../config/db/metrics/cost.js';
 import acu from '../config/db/metrics/acu.js';
 import dbCompute from '../config/db/metrics/dbCompute.js';
@@ -19,6 +20,7 @@ import tti from '../config/db/metrics/tti.js';
 import totalByteWeight from '../config/db/metrics/totalByteWeight.js';
 import avgServerRes from '../config/db/metrics/avgServerRes.js';
 import config from '../config/config.js';
+import domains from '../config/domains.js';
 
 const byteToMiB = (bytes) => Number(bytes / (1024 * 1024)).toFixed(2);
 
@@ -26,9 +28,13 @@ const logSave = (object) => {
     console.log(`Saving to DB - ${object.type} `);
 };
 
+const avgOnKey = (array, key) =>
+    array.reduce((acc, val) => acc + Number(val[key]), 0) / array.length;
+
 const runMetrics = async (startDate, endDate) => {
     db.connect();
     console.log(`Running all metrics`);
+    const periodString = `${config.DAYS_BACK}d`;
 
     try {
         // Get GiB of IATI Data (denominator)
@@ -77,30 +83,34 @@ const runMetrics = async (startDate, endDate) => {
         logSave(avgCPU);
         await avgCPU.save();
 
-        /* Google Analytics and Lighthouse Metrics:
-        - Time To Interative
-        - Avg Server Response Time
-        - Page Weight
-    */
-        const GAandLAdata = avgGAandLH(await getGAandLHmetrics(config.NUMBER_PAGES));
+        /* Google Analytics Metrics:
+        - Time To Interactive (TTI)
+        - Page Weight (totalByteWeight)
+        */
+        const lhData = flattenLHData(
+            await getLHMetrics(domains, periodString, config.NUMBER_PAGES)
+        );
 
         tti.startDate = startDate;
         tti.endDate = endDate;
-        tti.value = GAandLAdata.TTI / 1000; // ms to seconds
+        tti.value = avgOnKey(lhData, 'TTI') / 1000; // ms to seconds
 
         logSave(tti);
         await tti.save();
 
         totalByteWeight.startDate = startDate;
         totalByteWeight.endDate = endDate;
-        totalByteWeight.value = byteToMiB(GAandLAdata.totalByteWeight);
+        totalByteWeight.value = byteToMiB(avgOnKey(lhData, 'totalByteWeight'));
 
         logSave(totalByteWeight);
         await totalByteWeight.save();
 
+        // Avg Server Response Time
+        const avgServerResTimes = await getAvgServerResForDomains(domains, periodString);
+
         avgServerRes.startDate = startDate;
         avgServerRes.endDate = endDate;
-        avgServerRes.value = GAandLAdata.avgServerResponseTime;
+        avgServerRes.value = avgOnKey(avgServerResTimes, 'value') / 1000; // average across domains, convert to ms
 
         logSave(avgServerRes);
         await avgServerRes.save();

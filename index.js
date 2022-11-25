@@ -11,7 +11,7 @@ import {
     getCPU,
     getTotalValue,
 } from './metrics/azure.js';
-import { getGAandLHmetrics, getLHMetrics } from './metrics/google.js';
+import { getLHMetrics } from './metrics/google.js';
 import config from './config/config.js';
 import domains from './config/domains.js';
 import { getAvgServerResForDomains } from './metrics/plausible.js';
@@ -60,9 +60,6 @@ switch (argv[2]) {
         break;
     case 'lhMetrics':
         log(await getLHMetrics(domains, periodString, config.NUMBER_PAGES));
-        break;
-    case 'GAandLH':
-        log(await getGAandLHmetrics(config.NUMBER_PAGES));
         break;
     default:
         break;

@@ -16,8 +16,6 @@ env:
   AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
   AZURE_BLOB_CONNECTION_STRING: ${{ secrets.PROD_STORAGE_CONNECTION_STRING }}
   AZURE_BLOB_IATI_CONTAINER: ${{ secrets.AZURE_BLOB_IATI_CONTAINER }}
-  GOOGLE_APPLICATION_CREDENTIALS_FILENAME: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_FILENAME }}
-  GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
 
 jobs:
   build_save:
@@ -39,11 +37,6 @@ jobs:
         run: |
           unzip build-artifact.zip
           rm build-artifact.zip
-
-      - name: 'Copy in GA Credentials file'
-        shell: bash
-        run: |
-          echo $GOOGLE_APPLICATION_CREDENTIALS > $GOOGLE_APPLICATION_CREDENTIALS_FILENAME
 
       - name: 'Run Metrics'
         shell: bash

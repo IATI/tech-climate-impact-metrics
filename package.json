@@ -14,7 +14,6 @@
         "avgCPU": "node index.js avgCPU",
         "avgServerResponseTime": "node index.js avgServerResponseTime",
         "lhMetrics": "node index.js lhMetrics",
-        "GAandLH": "node index.js GAandLH",
         "prepare": "husky install"
     },
     "repository": {
@@ -37,7 +36,6 @@
         "chrome-launcher": "^0.15.1",
         "date-fns": "^2.29.3",
         "dotenv": "^16.0.3",
-        "googleapis": "^109.0.1",
         "lighthouse": "^9.6.8",
         "mongoose": "^6.7.3",
         "node-fetch": "^3.3.0"
