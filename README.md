@@ -62,11 +62,10 @@ DB_PASSWORD
 DB_PORT
 DB_NAME
 
-### Google Analytics
+### Plausible Analytics
 
-Uses a service account: https://github.com/googleapis/google-api-nodejs-client#service-account-credentials
-
-You need to download the .json file into the root of the project directory, then put the name of the file in GOOGLE_APPLICATION_CREDENTIALS_FILENAME
+Uses Plausible API: https://plausible.io/docs/stats-api#get-apiv1statsbreakdown
+PLAUSIBLE_API_KEY can be found here: https://plausible.io/settings
 
 ## Running Metrics
 
@@ -79,7 +78,8 @@ You need to download the .json file into the root of the project directory, then
         -   `acu` - ACU
         -   `dbCompute` - Database Compute
         -   `avgCPU` - Avg CPU %
-        -   `GAandLH` - Avg Server Response Time, Time to Interactive, and Page Weight metrics
+        -   `avgServerResponseTime` - Avg Server Response Time
+        -   `lhMetrics` - Time to Interactive, and Page Weight metrics
 
 ## Metric Setup
 
@@ -162,14 +162,25 @@ az aks nodepool update \
 -   `avgCPU=true` tag added to the AKS instances. Picked up by Metric code for 'Microsoft.ContainerService/managedClusters' resourceType.
 -   Had to filter out 'Microsoft.ManagedIdentity/userAssignedIdentities' resourceType in metric run.
 
-### Google Analytics and Lighthouse
+### Plausible Analytics and Lighthouse metrics
 
 -   Includes `Average Server Response Time`, `Page Weight`, and `Time to Interactive` metrics
 
-#### Google Analytics "Views"
+#### Plausible "Domains"
 
--   These are defined for each web property in this config file `config/gaViews.json`, the viewId is from Google Analytics
+-   These are defined for each web property in this config file `config/domains.js`
 
 #### `NUMBER_PAGES`
 
 -   Controls how many pages for each web property are evaluated for these metrics to create the average
+
+#### Average Server Response Time
+
+-   computed using https://developer.mozilla.org/en-US/docs/Web/API/PerformanceNavigationTiming `responseStart` custom metric from Plausible: [code](https://github.com/IATI/datastore-search/blob/08315b20bc7070adc1f3f437891be40d228ac562/src/App.vue#L155-L163)
+
+#### Page Weight and Time to Interactive
+
+Computed using the [lighthouse](https://github.com/GoogleChrome/lighthouse#readme) package.
+
+-   First Plausible is used to get the top `NUMBER_PAGES` pages for each domain, then `lighthouse` is run against each of those pages for each domain.
+-   After everything is averaged out to 1 final metric number.

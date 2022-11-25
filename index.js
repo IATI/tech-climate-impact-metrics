@@ -11,13 +11,18 @@ import {
     getCPU,
     getTotalValue,
 } from './metrics/azure.js';
-import { getGAandLHmetrics } from './metrics/google.js';
+import { getLHMetrics } from './metrics/lighthouse.js';
 import config from './config/config.js';
+import domains from './config/domains.js';
+import { getAvgServerResForDomains } from './metrics/plausible.js';
+
+const log = (object) => console.log(util.inspect(object, false, null, true));
 
 // Prepare start and end dates
 const endDate = endOfYesterday();
 let startDate = sub(endDate, { days: config.DAYS_BACK });
 startDate = add(startDate, { seconds: 1 });
+const periodString = `${config.DAYS_BACK}d`;
 
 console.log(
     `Running ${
@@ -33,25 +38,28 @@ switch (argv[2]) {
         await runMetrics(startDate, endDate);
         break;
     case 'gbIATI':
-        console.log(await getGbIATI());
+        log(await getGbIATI());
         break;
     case 'cost':
-        console.log(util.inspect(await getRawCost(startDate, endDate), false, null, true));
+        log(await getRawCost(startDate, endDate));
         break;
     case 'acu':
-        console.log(await getACU(await getAllResources()));
+        log(await getACU(await getAllResources()));
         break;
     case 'acu-total':
-        console.log(getTotalValue(await getACU(await getAllResources())));
+        log(getTotalValue(await getACU(await getAllResources())));
         break;
     case 'dbCompute':
-        console.log(await getDbCompute(await getAllResources()));
+        log(await getDbCompute(await getAllResources()));
         break;
     case 'avgCPU':
-        console.log(await getCPU(await getAllResources(), startDate, endDate));
+        log(await getCPU(await getAllResources(), startDate, endDate));
         break;
-    case 'GAandLH':
-        console.log(util.inspect(await getGAandLHmetrics(config.NUMBER_PAGES), false, null, true));
+    case 'avgServerResponseTime':
+        log(await getAvgServerResForDomains(domains, periodString));
+        break;
+    case 'lhMetrics':
+        log(await getLHMetrics(domains, periodString, config.NUMBER_PAGES));
         break;
     default:
         break;
