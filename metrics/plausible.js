@@ -25,4 +25,42 @@ const getPageViews = async (siteId, period, limit) => {
     return body;
 };
 
-export default getPageViews;
+const getEventStats = async (siteId, period, eventName, eventLabel) => {
+    const path = '/stats/breakdown';
+    const url = new URL(`${PLAUSIBLE_API_BASE}${path}`);
+    url.searchParams.set('property', `event:props:${eventLabel}`);
+    url.searchParams.set('filters', `event:name==${eventName}`);
+    url.searchParams.set('site_id', siteId);
+    url.searchParams.set('period', period);
+
+    const res = await fetch(url, { headers: myHeaders });
+
+    const body = await res.json();
+    if (res.status !== 200)
+        throw new Error(
+            `Error fetching file from github api. Status: ${res.status} Message: ${body.error} `
+        );
+    return body.results;
+};
+
+const getAvgServerRes = async (domain, period) => {
+    const rawStats = await getEventStats(domain, period, 'TTFB', 'event_label');
+
+    if (rawStats.length < 1) throw Error('No stats received from Plausible API');
+
+    // sum up so we can average
+    const { visitors, responseTime } = rawStats.reduce(
+        (acc, val) => {
+            acc.visitors += Number(val.visitors);
+            acc.responseTime += Number(val.event_label);
+
+            return acc;
+        },
+        { visitors: 0, responseTime: 0 }
+    );
+
+    // return average
+    return responseTime / visitors;
+};
+
+export { getPageViews, getEventStats, getAvgServerRes };
