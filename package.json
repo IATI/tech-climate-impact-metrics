@@ -12,6 +12,8 @@
         "acu-total": "node index.js acu-total",
         "dbCompute": "node index.js dbCompute",
         "avgCPU": "node index.js avgCPU",
+        "avgServerResponseTime": "node index.js avgServerResponseTime",
+        "lhMetrics": "node index.js lhMetrics",
         "GAandLH": "node index.js GAandLH",
         "prepare": "husky install"
     },

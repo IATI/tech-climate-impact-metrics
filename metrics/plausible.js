@@ -20,9 +20,9 @@ const getPageViews = async (siteId, period, limit) => {
     const body = await res.json();
     if (res.status !== 200)
         throw new Error(
-            `Error fetching file from github api. Status: ${res.status} Message: ${body.error} `
+            `Error fetching from ${url.pathname}. Status: ${res.status} Message: ${body.error} `
         );
-    return body;
+    return body.results;
 };
 
 const getEventStats = async (siteId, period, eventName, eventLabel) => {
@@ -43,7 +43,7 @@ const getEventStats = async (siteId, period, eventName, eventLabel) => {
     return body.results;
 };
 
-const getAvgServerRes = async (domain, period) => {
+const getAvgServerResForDomain = async (domain, period) => {
     const rawStats = await getEventStats(domain, period, 'TTFB', 'event_label');
 
     if (rawStats.length < 1) throw Error('No stats received from Plausible API');
@@ -63,4 +63,18 @@ const getAvgServerRes = async (domain, period) => {
     return responseTime / visitors;
 };
 
-export { getPageViews, getEventStats, getAvgServerRes };
+const getAvgServerResForDomains = async (domainList, period) => {
+    const queryResults = await domainList.reduce(async (acc, domain) => {
+        const nextAcc = await acc;
+
+        const domainAvg = await getAvgServerResForDomain(domain.siteId, period);
+
+        nextAcc.push({ domain, metric: 'avgServerResponseTime', value: domainAvg, unit: 'ms' });
+
+        return acc;
+    }, []);
+
+    return queryResults;
+};
+
+export { getPageViews, getEventStats, getAvgServerResForDomains };

@@ -4,6 +4,7 @@ import chromeLauncher from 'chrome-launcher';
 import path from 'path';
 import config from '../config/config.js';
 import gaViews from '../config/gaViews.js';
+import { getPageViews } from './plausible.js';
 
 const analyticsreporting = google.analyticsreporting('v4');
 
@@ -195,4 +196,22 @@ const getGAandLHmetrics = async (numberPages) => {
     return queryResults;
 };
 
-export { avgGAandLH, getGAandLHmetrics };
+const getLHMetrics = async (domainList, period, numPages) => {
+    const queryResults = await domainList.reduce(async (acc, domain) => {
+        const nextAcc = await acc;
+
+        const topPages = await getPageViews(domain.siteId, period, numPages);
+
+        const paths = topPages.map((page) => page.page);
+
+        const lhResults = await runLighthouseLoop(`https://${domain.siteId}`, paths);
+
+        nextAcc.push({ domain, value: lhResults });
+
+        return acc;
+    }, []);
+
+    return queryResults;
+};
+
+export { avgGAandLH, getGAandLHmetrics, getLHMetrics };
