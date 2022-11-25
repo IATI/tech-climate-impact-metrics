@@ -11,7 +11,7 @@ import {
     getCPU,
     getTotalValue,
 } from './metrics/azure.js';
-import { getLHMetrics } from './metrics/google.js';
+import { getLHMetrics } from './metrics/lighthouse.js';
 import config from './config/config.js';
 import domains from './config/domains.js';
 import { getAvgServerResForDomains } from './metrics/plausible.js';

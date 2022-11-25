@@ -10,7 +10,7 @@ import {
     getAvgValue,
     getCPU,
 } from './azure.js';
-import { getLHMetrics, flattenLHData } from './google.js';
+import { getLHMetrics, flattenLHData } from './lighthouse.js';
 import { getAvgServerResForDomains } from './plausible.js';
 import cost from '../config/db/metrics/cost.js';
 import acu from '../config/db/metrics/acu.js';
