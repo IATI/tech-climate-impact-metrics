@@ -19,7 +19,7 @@ import { getAvgServerResForDomains } from './metrics/plausible.js';
 const log = (object) => console.log(util.inspect(object, false, null, true));
 
 // Prepare start and end dates
-const endDate = endOfYesterday();
+let endDate = endOfYesterday();
 let startDate = sub(endDate, { days: config.DAYS_BACK });
 startDate = add(startDate, { seconds: 1 });
 const periodString = `${config.DAYS_BACK}d`;
@@ -41,6 +41,9 @@ switch (argv[2]) {
         log(await getGbIATI());
         break;
     case 'cost':
+        // shift cost back an additional day as there is a lag in cost metrics
+        startDate = sub(startDate, { days: 1 });
+        endDate = sub(endDate, { days: 1 });
         log(await getRawCost(startDate, endDate));
         break;
     case 'acu':
