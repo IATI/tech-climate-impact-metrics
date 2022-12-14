@@ -1,3 +1,4 @@
+import { sub } from 'date-fns';
 import db from '../config/db/database.js';
 import {
     getGbIATI,
@@ -41,7 +42,10 @@ const runMetrics = async (startDate, endDate) => {
         const gibIATI = await getGbIATI();
 
         // Azure Cost
-        const costData = getMetricCost(await getRawCost(startDate, endDate));
+        // shift cost back an additional day as there is a lag in cost metrics availability
+        const costStartDate = sub(startDate, { days: 1 });
+        const costEndDate = sub(endDate, { days: 1 });
+        const costData = getMetricCost(await getRawCost(costStartDate, costEndDate));
 
         cost.startDate = startDate;
         cost.endDate = endDate;
