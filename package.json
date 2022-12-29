@@ -37,7 +37,7 @@
         "date-fns": "^2.29.3",
         "dotenv": "^16.0.3",
         "lighthouse": "^9.6.8",
-        "mongoose": "^6.8.1",
+        "mongoose": "^6.8.2",
         "node-fetch": "^3.3.0"
     },
     "devDependencies": {
