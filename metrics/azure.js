@@ -7,7 +7,7 @@ const byteToGiB = (bytes) => Number(bytes / (1024 * 1024 * 1024)).toFixed(2);
 
 const getGbIATI = async () => {
     const blobServiceClient = BlobServiceClient.fromConnectionString(
-        config.AZURE_BLOB_CONNECTION_STRING
+        config.AZURE_BLOB_CONNECTION_STRING,
     );
     const containerClient = blobServiceClient.getContainerClient(config.AZURE_BLOB_IATI_CONTAINER);
     let iatiBytes = 0;
@@ -21,7 +21,7 @@ const getGbIATI = async () => {
 const getMetricCost = (rawCost) => {
     const total = rawCost.properties.rows.reduce(
         (acc, val) => Number(acc) + Number(val[1]),
-        Number(0)
+        Number(0),
     );
     return { cost: total.toFixed(2), currency: 'USD' };
 };
@@ -71,7 +71,7 @@ const getRawCost = async (startDate, endDate) => {
 
         const response = await fetch(
             `https://management.azure.com/subscriptions/${config.AZURE_SUBSCRIPTION_ID}/providers/Microsoft.CostManagement/query?api-version=2021-10-01`,
-            requestOptions
+            requestOptions,
         );
 
         const data = await response.json();
@@ -98,7 +98,7 @@ const getAllResources = async () => {
 
     const response = await fetch(
         `https://management.azure.com/subscriptions/${config.AZURE_SUBSCRIPTION_ID}/resources?api-version=2021-04-01`,
-        requestOptions
+        requestOptions,
     );
 
     const data = await response.json();
@@ -173,11 +173,11 @@ const getCPU = async (resources, startDate, endDate) => {
                 };
 
                 let url = new URL(
-                    `https://management.azure.com${resource.id}/providers/microsoft.Insights/metrics`
+                    `https://management.azure.com${resource.id}/providers/microsoft.Insights/metrics`,
                 );
                 url.searchParams.set(
                     'timespan',
-                    `${startDate.toISOString()}/${endDate.toISOString()}`
+                    `${startDate.toISOString()}/${endDate.toISOString()}`,
                 );
                 url.searchParams.set('interval', 'FULL');
                 url.searchParams.set('aggregation', 'average');
@@ -205,7 +205,7 @@ const getCPU = async (resources, startDate, endDate) => {
                         url.searchParams.set('useMDM', 'false');
                         url.searchParams.set(
                             'prefer',
-                            'ai.include-metadata,ai.ignoreInvalidFilterDimensions=true'
+                            'ai.include-metadata,ai.ignoreInvalidFilterDimensions=true',
                         );
                         url.searchParams.set('api-version', '2018-04-20');
 
@@ -236,23 +236,29 @@ const getCPU = async (resources, startDate, endDate) => {
                 }
                 switch (resource.type) {
                     case 'microsoft.insights/components':
-                        result.push({
-                            metric: 'avgCPU',
-                            value: data[0].body.value[
-                                'performanceCounters/processCpuPercentageTotal'
-                            ].avg,
-                            resourceType: resource.type,
-                            resourceId: resource.id,
-                        });
+                        if (
+                            data[0].body.value['performanceCounters/processCpuPercentageTotal']
+                                .avg !== undefined
+                        ) {
+                            result.push({
+                                metric: 'avgCPU',
+                                value: data[0].body.value[
+                                    'performanceCounters/processCpuPercentageTotal'
+                                ].avg,
+                                resourceType: resource.type,
+                                resourceId: resource.id,
+                            });
+                        }
                         break;
                     default:
-                        result.push({
-                            metric: 'avgCPU',
-                            value: data.value[0].timeseries[0].data[0].average,
-                            resourceType: resource.type,
-                            resourceId: resource.id,
-                        });
-
+                        if (data.value[0].timeseries[0].data[0].average !== undefined) {
+                            result.push({
+                                metric: 'avgCPU',
+                                value: data.value[0].timeseries[0].data[0].average,
+                                resourceType: resource.type,
+                                resourceId: resource.id,
+                            });
+                        }
                         break;
                 }
             }
