@@ -1,9 +1,9 @@
 import lighthouse from 'lighthouse';
-import chromeLauncher from 'chrome-launcher';
+import * as ChromeLauncher from 'chrome-launcher';
 import { getPageViews } from './plausible.js';
 
 const runLighthouse = async (url, verbose) => {
-    const chrome = await chromeLauncher.launch({ chromeFlags: ['--headless'] });
+    const chrome = await ChromeLauncher.launch({ chromeFlags: ['--headless'] });
     const options = {
         output: 'json',
         onlyAudits: ['interactive', 'diagnostics'],
@@ -17,7 +17,7 @@ const runLighthouse = async (url, verbose) => {
         console.log('Time to interactive was', runnerResult.lhr.audits.interactive.numericValue);
         console.log(
             'totalByteWeight was',
-            runnerResult.lhr.audits.diagnostics.details.items[0].totalByteWeight
+            runnerResult.lhr.audits.diagnostics.details.items[0].totalByteWeight,
         );
     }
 
