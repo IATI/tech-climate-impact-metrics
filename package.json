@@ -36,7 +36,7 @@
         "chrome-launcher": "^1.1.0",
         "date-fns": "^2.30.0",
         "dotenv": "^16.3.1",
-        "lighthouse": "^10.4.0",
+        "lighthouse": "^11.3.0",
         "mongoose": "^8.0.2",
         "node-fetch": "^3.3.2"
     },
